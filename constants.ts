@@ -8,7 +8,7 @@ export const PRODUCTS: Product[] = [
     price: Pricing.HOME_ASSISTANCE,
     description: 'A smart AI-powered home assistant that connects and manages all your NEXAI appliances, automates routines, and provides proactive support.',
     features: ['Central Control Hub', 'Voice Command', 'AI Automation'],
-    image: 'https://images.unsplash.com/photo-1558002038-1091a166111c?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop',
   },
   {
     id: 'ac-01',
@@ -17,7 +17,7 @@ export const PRODUCTS: Product[] = [
     price: Pricing.AIR_CONDITIONER,
     description: 'AI-calibrated cooling that adapts to your body temperature and room occupancy.',
     features: ['Motion Sensing', 'Energy Saver Mode', 'Voice Control'],
-    image: 'https://images.unsplash.com/photo-1624021703649-65239e320d7d?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1615818451848-15814e8677c7?q=80&w=800&auto=format&fit=crop',
   },
   {
     id: 'wm-01',
@@ -26,7 +26,7 @@ export const PRODUCTS: Product[] = [
     price: Pricing.WASHING_MACHINE,
     description: 'Smart fabric sensing technology determines the perfect cycle for every load.',
     features: ['Auto-Dosing', 'Steam Hygiene', 'Silent Drive'],
-    image: 'https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?q=80&w=800&auto=format&fit=crop',
   },
   {
     id: 'ap-01',
@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
     price: Pricing.AIR_PURIFIER,
     description: 'Real-time air quality monitoring with HEPA-14 AI filtration systems.',
     features: ['Laser Particle Sensor', '360° Intake', 'Sleep Mode'],
-    image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1632007823521-df6275811c75?q=80&w=800&auto=format&fit=crop',
   },
   {
     id: 'vr-01',
@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
     price: Pricing.VACUUM_ROBOT,
     description: 'LiDAR-guided navigation with AI obstacle avoidance and self-emptying base.',
     features: ['LiDAR Mapping', 'Mop Function', 'Pet Recognition'],
-    image: 'https://images.unsplash.com/photo-1596238626243-7f3e827254a6?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1589820296156-2454bb8a4aa2?q=80&w=800&auto=format&fit=crop',
   },
   {
     id: 'rf-01',
@@ -53,7 +53,7 @@ export const PRODUCTS: Product[] = [
     price: Pricing.REFRIGERATOR,
     description: 'Inventory tracking and freshness preservation powered by deep learning.',
     features: ['Smart Screen', 'Inventory Cam', 'InstaView'],
-    image: 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1536353284924-9220c464e6e8?q=80&w=800&auto=format&fit=crop',
   },
 ];
 

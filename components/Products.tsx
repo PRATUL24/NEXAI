@@ -1,26 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Zap, Sparkles, Eye, X, Check, Loader2 } from 'lucide-react';
+import { ShoppingBag, Zap, Eye, X, Check, Sparkles, Loader2 } from 'lucide-react';
 import { PRODUCTS } from '../constants';
 import { Product } from '../types';
 import { generateProductImage } from '../services/geminiService';
 import { getImage, saveImage } from '../utils/imageStorage';
 
 const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ product, onClose }) => {
-  // We need to resolve the image here as well in case it differs from the card, 
-  // but usually passing the imageSrc from parent is better. 
-  // However, Product object structure is fixed. 
-  // We will re-fetch from cache to ensure consistency if the modal opens.
-  
-  const [modalImage, setModalImage] = useState(product.image);
+  const [imageSrc, setImageSrc] = useState(product.image);
 
   useEffect(() => {
-    const loadCachedImage = async () => {
-      const cached = await getImage(product.id);
-      if (cached) {
-        setModalImage(cached);
-      }
-    };
-    loadCachedImage();
+    // Try to get cached image to ensure consistency with card
+    getImage(product.id).then(cached => {
+        if(cached) setImageSrc(cached);
+    });
 
     // Lock body scroll
     document.body.style.overflow = 'hidden';
@@ -45,16 +37,16 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
         </button>
 
         {/* Image Section */}
-        <div className="w-full md:w-1/2 bg-zinc-800 relative min-h-[300px]">
+        <div className="w-full md:w-1/2 bg-zinc-800 relative min-h-[300px] group">
            <img 
-             src={modalImage} 
+             src={imageSrc} 
              alt={product.name}
-             className="w-full h-full object-cover"
+             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
            />
            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="h-4 w-4 text-purple-400" />
-                <span className="text-xs font-bold text-purple-200 uppercase tracking-wider">AI Enhanced Visual</span>
+                <Sparkles className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-bold text-sky-200 uppercase tracking-wider">Premium Finish</span>
               </div>
            </div>
         </div>
@@ -103,75 +95,79 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
 };
 
 const ProductCard: React.FC<{ product: Product; onQuickView: () => void }> = ({ product, onQuickView }) => {
-  const [imageSrc, setImageSrc] = useState<string>(product.image);
+  const [imageSrc, setImageSrc] = useState(product.image);
   const [isAiGenerated, setIsAiGenerated] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-    
-    const fetchImage = async () => {
-      try {
-        // 1. Check IndexDB
-        const cached = await getImage(product.id);
-        if (cached) {
-          if (isMounted) {
-            setImageSrc(cached);
-            setIsAiGenerated(true);
-          }
-          return;
-        }
 
-        // 2. If no cache, generate new
-        if (isMounted) setLoading(true);
-        const generatedUrl = await generateProductImage(product.name, product.category, product.description);
-        
-        if (generatedUrl && isMounted) {
-          setImageSrc(generatedUrl);
-          setIsAiGenerated(true);
-          // 3. Save to cache
-          await saveImage(product.id, generatedUrl);
+    const loadAiImage = async () => {
+        try {
+            // Check cache first
+            const cachedImage = await getImage(product.id);
+            if (cachedImage) {
+                if (isMounted) {
+                    setImageSrc(cachedImage);
+                    setIsAiGenerated(true);
+                }
+                return;
+            }
+
+            // Generate if not cached
+            if (isMounted) setLoading(true);
+            const generatedImage = await generateProductImage(product.name, product.category, product.description);
+            
+            if (generatedImage && isMounted) {
+                setImageSrc(generatedImage);
+                setIsAiGenerated(true);
+                await saveImage(product.id, generatedImage);
+            }
+        } catch (e) {
+            console.error("Failed to load AI image for " + product.name, e);
+        } finally {
+            if (isMounted) setLoading(false);
         }
-      } catch (error) {
-        console.error("Image gen error:", error);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
     };
-
-    fetchImage();
+    
+    // Slight delay to stagger requests if multiple cards load at once, though Promise.all/independent is fine
+    // Just call it
+    loadAiImage();
 
     return () => { isMounted = false; };
-  }, [product.id, product.name, product.category, product.description]);
+  }, [product]);
 
   return (
-    <div className="group relative bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-purple-500/50 transition-all duration-500 h-full flex flex-col">
+    <div className="group relative bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-sky-500/50 transition-all duration-500 h-full flex flex-col">
       {/* Image Container */}
       <div className="aspect-square w-full overflow-hidden bg-zinc-800 relative cursor-pointer" onClick={onQuickView}>
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-80 z-10 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-60 z-10 pointer-events-none"></div>
         
         <img
           src={imageSrc}
           alt={product.name}
-          className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${loading ? 'opacity-50 blur-sm' : 'opacity-100'}`}
+          className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter ${loading ? 'blur-sm grayscale' : ''}`}
           loading="lazy"
         />
 
-        {/* Loading / AI Indicators */}
-        <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
-           {loading && (
-             <div className="bg-black/60 backdrop-blur px-2 py-1 rounded border border-sky-500/30 flex items-center gap-2 animate-pulse">
-                <Loader2 className="h-3 w-3 animate-spin text-sky-400" />
-                <span className="text-[10px] text-sky-400 font-mono tracking-wider">GENERATING...</span>
-             </div>
-           )}
-           {isAiGenerated && !loading && (
-             <div className="bg-black/60 backdrop-blur px-2 py-1 rounded border border-purple-500/30 flex items-center gap-2">
-                <Sparkles className="h-3 w-3 text-purple-400" />
-                <span className="text-[10px] text-purple-400 font-mono tracking-wider">AI GENERATED</span>
-             </div>
-           )}
-        </div>
+        {/* Loading Indicator */}
+        {loading && (
+            <div className="absolute inset-0 flex items-center justify-center z-30">
+                <div className="bg-black/70 p-3 rounded-full backdrop-blur-md border border-white/10">
+                    <Loader2 className="h-6 w-6 text-sky-400 animate-spin" />
+                </div>
+            </div>
+        )}
+
+        {/* AI Badge */}
+        {isAiGenerated && !loading && (
+            <div className="absolute top-4 left-4 z-20">
+                <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded px-2 py-1 flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3 text-purple-400" />
+                    <span className="text-[10px] font-bold text-purple-200 tracking-wider">AI GENERATED</span>
+                </div>
+            </div>
+        )}
 
         <div className="absolute top-4 right-4 z-20 bg-black/80 backdrop-blur px-3 py-1 border border-white/10">
           <span className="text-xs font-bold text-white tracking-widest">{product.category}</span>
@@ -187,7 +183,7 @@ const ProductCard: React.FC<{ product: Product; onQuickView: () => void }> = ({ 
 
       {/* Content */}
       <div className="p-6 relative z-20 -mt-12 flex-1 flex flex-col">
-        <h3 className="text-2xl font-bold text-white font-heading mb-1 group-hover:text-purple-400 transition-colors cursor-pointer" onClick={onQuickView}>
+        <h3 className="text-2xl font-bold text-white font-heading mb-1 group-hover:text-sky-400 transition-colors cursor-pointer" onClick={onQuickView}>
           {product.name}
         </h3>
         <div className="flex items-baseline gap-1 mb-4">
@@ -221,13 +217,13 @@ export const Products: React.FC = () => {
 
   return (
     <section id="products" className="py-24 bg-black relative">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-900/10 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-16">
           <div>
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">
-              THE <span className="text-purple-500">LINEUP</span>
+              THE <span className="text-sky-500">LINEUP</span>
             </h2>
             <p className="text-gray-400">Next-gen appliances available today.</p>
           </div>

@@ -47,19 +47,18 @@ export const generateProductImage = async (productName: string, category: string
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
-    const prompt = `Futuristic product photography of ${productName}, a high-tech ${category}. 
+    const prompt = `Futuristic, high-end product photography of ${productName}, a ${category}. 
     ${description}.
-    Style: Sleek, matte black and metallic silver finish with glowing cyan LED accents. 
-    Setting: Dark moody studio lighting, reflection on black glass floor, cinematic 8k resolution, minimalist, hyper-realistic. 
-    No text overlays.`;
+    Aesthetic: Cyberpunk, sleek, matte black with neon cyan/blue LED accents. 
+    Environment: Dark studio with reflection. 
+    Style: Photorealistic, 8k resolution, cinematic lighting. 
+    No text, no labels.`;
 
-    // Using gemini-2.5-flash-image for generation
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: prompt,
     });
 
-    // Iterate through parts to find the image data
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) {
         return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
