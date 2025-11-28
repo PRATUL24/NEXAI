@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Phone, Mail, FileText, Wrench, Download, MessageSquare, ChevronDown, CheckCircle, Send, Loader2 } from 'lucide-react';
+import { Search, Phone, Mail, FileText, Wrench, Download, MessageSquare, ChevronDown, CheckCircle, Send, Loader2, Cpu, Video, Settings, Wifi } from 'lucide-react';
 
 export const SupportPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -89,6 +89,47 @@ export const SupportPage: React.FC = () => {
             
             {/* Main Content Area */}
             <div className="lg:col-span-2 space-y-12">
+               
+               {/* NEW: Dedicated Home Assistance Section */}
+               <div className="bg-zinc-900/50 border border-indigo-500/30 rounded-2xl p-8 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-indigo-500/20 rounded-lg">
+                      <Cpu className="h-6 w-6 text-indigo-400" />
+                    </div>
+                    <h2 className="text-2xl font-heading font-bold">Home Assistance Support Center</h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                     <div className="bg-black/40 border border-zinc-800 p-4 rounded-lg hover:border-indigo-500/50 transition-colors">
+                        <Settings className="h-5 w-5 text-indigo-400 mb-2" />
+                        <h4 className="font-bold mb-1">Hub Setup Guide</h4>
+                        <p className="text-sm text-gray-400 mb-3">Step-by-step instructions to initialize your central command.</p>
+                        <a href="#" className="text-xs text-indigo-400 font-bold uppercase hover:underline">Read Guide &rarr;</a>
+                     </div>
+                     <div className="bg-black/40 border border-zinc-800 p-4 rounded-lg hover:border-indigo-500/50 transition-colors">
+                        <Wifi className="h-5 w-5 text-indigo-400 mb-2" />
+                        <h4 className="font-bold mb-1">Automation Tutorials</h4>
+                        <p className="text-sm text-gray-400 mb-3">Learn to create 'Good Morning' and 'Security' routines.</p>
+                        <a href="#" className="text-xs text-indigo-400 font-bold uppercase hover:underline">Watch Video &rarr;</a>
+                     </div>
+                  </div>
+
+                  <div>
+                     <h4 className="font-bold text-sm text-gray-400 uppercase tracking-wider mb-4">Common Hub Solutions</h4>
+                     <div className="space-y-3">
+                        <div className="flex items-start gap-3 text-sm text-gray-300">
+                           <div className="mt-1 w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
+                           <p><strong>Device Pairing:</strong> Ensure devices are in pairing mode (holding power for 5s) before scanning.</p>
+                        </div>
+                        <div className="flex items-start gap-3 text-sm text-gray-300">
+                           <div className="mt-1 w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
+                           <p><strong>Voice Commands:</strong> If unresponsive, check microphone mute status on the top panel.</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
                {/* FAQs */}
                <div>
                   <h2 className="text-2xl font-heading font-bold mb-8 flex items-center gap-2">
@@ -99,7 +140,8 @@ export const SupportPage: React.FC = () => {
                         { q: "How do I connect my appliance to the NEXAI app?", a: "Download the NEXAI Hub app, create an account, and tap 'Add Device'. Follow the on-screen scanning process to pair via Bluetooth." },
                         { q: "What does the 'Neural Optimization' mode do?", a: "It uses AI to analyze your usage patterns and environmental factors to automatically adjust settings for maximum energy efficiency." },
                         { q: "How do I claim my 2-year warranty?", a: "Log in to your account, navigate to 'My Devices', select the product, and click 'File Claim'. Our AI will assess the issue immediately." },
-                        { q: "Where can I find replacement parts?", a: "Genuine parts can be ordered directly through the app or by visiting an authorized service center listed on this page." }
+                        { q: "Where can I find replacement parts?", a: "Genuine parts can be ordered directly through the app or by visiting an authorized service center listed on this page." },
+                        { q: "Does the Home Assistance Hub work without Wi-Fi?", a: "Basic local control functions remain active via Bluetooth Mesh, but remote access and AI updates require an internet connection." }
                      ].map((faq, idx) => (
                         <div key={idx} className="border border-zinc-800 rounded-lg p-4 hover:border-zinc-700 bg-zinc-900/30">
                            <button className="flex justify-between items-center w-full text-left font-bold text-gray-200">
@@ -184,6 +226,7 @@ export const SupportPage: React.FC = () => {
                                  className="w-full bg-black/50 border border-zinc-700 rounded-lg p-3 text-white focus:border-sky-500 focus:outline-none transition-colors"
                               >
                                  <option value="" disabled>Select a product</option>
+                                 <option value="ha-01">NEXAI Home Assistance Hub</option>
                                  <option value="ac-01">NEXAI Breeze X1 (AC)</option>
                                  <option value="wm-01">NEXAI Wash Pro (Washing Machine)</option>
                                  <option value="ap-01">NEXAI Pure (Air Purifier)</option>
@@ -267,6 +310,10 @@ export const SupportPage: React.FC = () => {
                      </a>
                      <a href="#" className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors group">
                         <Download className="h-4 w-4 group-hover:text-sky-400" /> App (iOS / Android)
+                     </a>
+                     {/* Added Home Assist manual link */}
+                     <a href="#" className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors group">
+                        <Video className="h-4 w-4 group-hover:text-sky-400" /> Setup Video Tutorials
                      </a>
                   </div>
                </div>

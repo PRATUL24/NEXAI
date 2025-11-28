@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wifi, Zap, Smartphone, ShieldCheck, Play, Loader2, Scan, Activity } from 'lucide-react';
+import { Wifi, Zap, Smartphone, ShieldCheck, Play, Loader2, Scan, Activity, Cpu, Home, Sun, Lock } from 'lucide-react';
 
 export const DemoVideo: React.FC = () => {
   const [step, setStep] = useState(0);
@@ -10,8 +10,8 @@ export const DemoVideo: React.FC = () => {
     if (!isPlaying) return;
     
     const interval = setInterval(() => {
-      setStep((prev) => (prev + 1) % 4);
-    }, 4000); // 4 seconds per scene
+      setStep((prev) => (prev + 1) % 5);
+    }, 4500); // 4.5 seconds per scene
 
     return () => clearInterval(interval);
   }, [isPlaying]);
@@ -28,6 +28,43 @@ export const DemoVideo: React.FC = () => {
            <div className="absolute inset-0 border-t-2 border-sky-400 rounded-full animate-spin"></div>
            <Scan className="h-16 w-16 text-sky-400" />
            <div className="absolute -bottom-8 text-xs font-mono text-sky-400">SCANNING...</div>
+        </div>
+      )
+    },
+    {
+      title: "CENTRAL COMMAND",
+      subtitle: "NEXAI Home Assistant Active",
+      icon: Cpu,
+      color: "text-indigo-400",
+      bg: "bg-indigo-500/10",
+      visual: (
+        <div className="relative flex items-center justify-center h-48 w-48">
+           {/* Central Hub */}
+           <div className="z-20 bg-zinc-900 border border-indigo-500 p-4 rounded-xl shadow-[0_0_30px_rgba(99,102,241,0.4)] relative">
+              <Home className="h-8 w-8 text-indigo-400" />
+              <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              </span>
+           </div>
+           
+           {/* Orbiting Automation Scenarios */}
+           <div className="absolute animate-[spin_8s_linear_infinite] w-40 h-40 border border-dashed border-zinc-700 rounded-full">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-zinc-900 p-1 rounded-full border border-yellow-500/50">
+                 <Sun className="h-4 w-4 text-yellow-500" />
+              </div>
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-zinc-900 p-1 rounded-full border border-red-500/50">
+                 <Lock className="h-4 w-4 text-red-500" />
+              </div>
+              <div className="absolute top-1/2 -left-3 -translate-y-1/2 bg-zinc-900 p-1 rounded-full border border-green-500/50">
+                 <Zap className="h-4 w-4 text-green-500" />
+              </div>
+           </div>
+           
+           {/* Connecting Lines */}
+           <div className="absolute inset-0 flex items-center justify-center opacity-30">
+              <div className="w-32 h-32 border border-indigo-500/30 rounded-full animate-ping duration-1000"></div>
+           </div>
         </div>
       )
     },
@@ -97,7 +134,7 @@ export const DemoVideo: React.FC = () => {
                    SEE THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-600">FUTURE</span> IN ACTION
                 </h2>
                 <p className="text-gray-400 text-lg leading-relaxed max-w-lg">
-                   Watch how NEXAI appliances autonomously adapt to your lifestyle, saving energy while providing unparalleled comfort.
+                   Watch how NEXAI appliances autonomously adapt to your lifestyle, centered around the new <strong>Home Assistance Hub</strong>.
                 </p>
                 <button className="text-white font-bold tracking-widest border-b border-sky-500 pb-1 hover:text-sky-400 transition-colors">
                    EXPLORE FEATURES &rarr;
@@ -130,7 +167,7 @@ export const DemoVideo: React.FC = () => {
                       <div className="absolute bottom-0 left-0 h-1 bg-zinc-800 w-full">
                          <div 
                            className="h-full bg-sky-500 transition-all duration-300 ease-linear"
-                           style={{ width: `${((step + 1) / 4) * 100}%` }}
+                           style={{ width: `${((step + 1) / 5) * 100}%` }}
                          ></div>
                       </div>
                    </div>

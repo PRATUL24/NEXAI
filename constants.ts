@@ -2,6 +2,15 @@ import { Product, Pricing } from './types';
 
 export const PRODUCTS: Product[] = [
   {
+    id: 'ha-01',
+    name: 'NEXAI Home Assistance',
+    category: 'Smart Hub',
+    price: Pricing.HOME_ASSISTANCE,
+    description: 'A smart AI-powered home assistant that connects and manages all your NEXAI appliances, automates routines, and provides proactive support.',
+    features: ['Central Control Hub', 'Voice Command', 'AI Automation'],
+    image: 'https://picsum.photos/seed/homeassist/600/600',
+  },
+  {
     id: 'ac-01',
     name: 'NEXAI Breeze X1',
     category: 'Air Conditioner',
