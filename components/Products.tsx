@@ -94,13 +94,14 @@ const ProductModal: React.FC<{ product: Product; onClose: () => void }> = ({ pro
   );
 };
 
-const ProductCard: React.FC<{ product: Product; onQuickView: () => void }> = ({ product, onQuickView }) => {
+const ProductCard: React.FC<{ product: Product; index: number; onQuickView: () => void }> = ({ product, index, onQuickView }) => {
   const [imageSrc, setImageSrc] = useState(product.image);
   const [isAiGenerated, setIsAiGenerated] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     const loadAiImage = async () => {
         try {
@@ -130,12 +131,17 @@ const ProductCard: React.FC<{ product: Product; onQuickView: () => void }> = ({ 
         }
     };
     
-    // Slight delay to stagger requests if multiple cards load at once, though Promise.all/independent is fine
-    // Just call it
-    loadAiImage();
+    // Stagger requests to avoid rate limits (800ms apart)
+    // This is crucial for deployment where many requests fire at once
+    timeoutId = setTimeout(() => {
+      loadAiImage();
+    }, index * 800);
 
-    return () => { isMounted = false; };
-  }, [product]);
+    return () => { 
+      isMounted = false; 
+      clearTimeout(timeoutId);
+    };
+  }, [product, index]);
 
   return (
     <div className="group relative bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-sky-500/50 transition-all duration-500 h-full flex flex-col">
@@ -162,7 +168,7 @@ const ProductCard: React.FC<{ product: Product; onQuickView: () => void }> = ({ 
         {/* AI Badge */}
         {isAiGenerated && !loading && (
             <div className="absolute top-4 left-4 z-20">
-                <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded px-2 py-1 flex items-center gap-1.5">
+                <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded px-2 py-1 flex items-center gap-1.5 animate-in fade-in">
                     <Sparkles className="h-3 w-3 text-purple-400" />
                     <span className="text-[10px] font-bold text-purple-200 tracking-wider">AI GENERATED</span>
                 </div>
@@ -233,10 +239,11 @@ export const Products: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PRODUCTS.map((product) => (
+          {PRODUCTS.map((product, index) => (
             <ProductCard 
               key={product.id} 
               product={product} 
+              index={index}
               onQuickView={() => setSelectedProduct(product)}
             />
           ))}
