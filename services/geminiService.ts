@@ -1,6 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 import { PRODUCTS } from '../constants';
 
+declare const process: any;
+
 const SYSTEM_INSTRUCTION = `
 You are NEXAI ASSISTANT, the advanced AI support agent for NEXAI Home Appliances.
 Your goal is to assist customers with product information, pricing, and support.

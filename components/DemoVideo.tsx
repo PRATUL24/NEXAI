@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wifi, Zap, Smartphone, ShieldCheck, Play, Loader2, Scan, Activity, Cpu, Home, Sun, Lock } from 'lucide-react';
+import { Wifi, Zap, Smartphone, ShieldCheck, Play, Scan, Cpu, Home, Sun, Lock } from 'lucide-react';
 
 export const DemoVideo: React.FC = () => {
   const [step, setStep] = useState(0);

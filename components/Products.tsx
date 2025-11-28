@@ -165,8 +165,12 @@ const ProductCard: React.FC<{ product: Product; onQuickView: () => void }> = ({ 
                 <span className="text-[10px] text-sky-400 font-mono tracking-wider">GENERATING...</span>
              </div>
            )}
-           
-           
+           {isAiGenerated && !loading && (
+             <div className="bg-black/60 backdrop-blur px-2 py-1 rounded border border-purple-500/30 flex items-center gap-2">
+                <Sparkles className="h-3 w-3 text-purple-400" />
+                <span className="text-[10px] text-purple-400 font-mono tracking-wider">AI GENERATED</span>
+             </div>
+           )}
         </div>
 
         <div className="absolute top-4 right-4 z-20 bg-black/80 backdrop-blur px-3 py-1 border border-white/10">
