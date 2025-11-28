@@ -34,7 +34,7 @@ export const sendMessageToGemini = async (history: { role: string, parts: { text
     });
 
     const result = await chat.sendMessage({ message });
-    return result.text;
+    return result.text ?? "";
   } catch (error) {
     console.error("Gemini API Error:", error);
     return "I am currently recalibrating my neural network. Please try again momentarily.";
